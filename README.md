@@ -6,6 +6,10 @@ A web-based application for preparing dental 3D scans for Instron machine retent
 
 **[Launch App in Browser](https://maxethis.github.io/Maryland-Pull-Out-Device-Model-Prep/)** - No installation required.
 
+## 💻 Install Desktop App
+
+**[Download for Windows & Mac](https://github.com/MaxeThis/Maryland-Pull-Out-Device-Model-Prep/releases)** - Run natively on your machine.
+
 ## Overview
 
 The Maryland Pull-Out Device is a standardized mounting system for orthodontic retention testing. This companion software streamlines the model preparation process, replacing manual workflows in Blender with an intuitive, purpose-built interface.
