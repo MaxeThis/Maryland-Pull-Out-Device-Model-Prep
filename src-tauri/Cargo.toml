@@ -1,0 +1,20 @@
+[package]
+name = "maryland-pull-out-device-model-prep"
+version = "1.0.0"
+description = "Prepare dental 3D scans for Instron machine testing"
+authors = ["Maryland Pull-Out Device Team"]
+edition = "2021"
+rust-version = "1.60"
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies]
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+tauri = { version = "1.5", features = [ "fs-all", "path-all", "dialog-all", "window-all", "shell-open"] }
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem
+# any-protocol-guy is required for custom protocol usage
+custom-protocol = ["tauri/custom-protocol"]

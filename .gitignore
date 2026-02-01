@@ -1,0 +1,52 @@
+# Rust / Tauri
+src-tauri/target/
+
+# Electron Build Files
+
+# Dependencies
+node_modules/
+
+# Build output
+out/
+build/
+
+# Mac
+*.dmg
+*.app
+
+# Windows
+*.exe
+*.msi
+*.nsis
+
+# Logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory
+coverage/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+.agent/
+
+# Temp files
+*.tmp
+*.temp
+
+# Environment variables (NEVER commit credentials!)
+.env
+.env.local
+.env.*.local

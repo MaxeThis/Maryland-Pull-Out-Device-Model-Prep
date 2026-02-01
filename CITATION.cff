@@ -1,0 +1,72 @@
+# This CITATION.cff file was generated to help others cite this software.
+# Update the placeholder values once the associated publication is accepted.
+
+cff-version: 1.2.0
+title: "Maryland Pull-Out Device Model Prep"
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+version: 1.0.0
+date-released: 2026-01-02
+license: MIT
+repository-code: "https://github.com/MaxeThis/Maryland-Pull-Out-Device-Model-Prep"
+
+# ============================================================================
+# AUTHOR INFORMATION - TO BE UPDATED
+# ============================================================================
+authors:
+  - family-names: "Copello"
+    given-names: "Flavio"
+    affiliation: "University of Maryland School of Dentistry, Department of Orthodontics and Pediatric Dentistry"
+  - family-names: "Mendelson"
+    given-names: "Maxwell"
+    email: "maxwell.mendelson@umaryland.edu"
+    affiliation: "University of Maryland School of Dentistry"
+    orcid: "https://orcid.org/0009-0005-1811-2881"
+  - family-names: "Johnston"
+    given-names: "Trevor"
+    affiliation: "University of Maryland School of Dentistry"
+  - family-names: "Stafman"
+    given-names: "Alexa"
+    affiliation: "University of Maryland School of Dentistry"
+  - family-names: "Olaleye"
+    given-names: "Esther"
+    affiliation: "University of Maryland School of Dentistry"
+
+# ============================================================================
+# PUBLICATION REFERENCE - TO BE UPDATED AFTER JOURNAL ACCEPTANCE
+# ============================================================================
+# Uncomment and update the following section once the paper is published:
+#
+# preferred-citation:
+#   type: article
+#   authors:
+#     - family-names: "[Last Name]"
+#       given-names: "[First Name]"
+#   title: "[Title of the Journal Article]"
+#   journal: "[Journal Name]"
+#   year: 2026
+#   volume: "[Volume]"
+#   issue: "[Issue]"
+#   start: "[Start Page]"
+#   end: "[End Page]"
+#   doi: "[DOI]"
+
+# ============================================================================
+# PROJECT DESCRIPTION
+# ============================================================================
+abstract: >
+  Companion software for "A 3D-Printed Device for Measuring Orthodontic 
+  Retainer and Aligner Retention: Design, Fabrication, and Application."
+  This web-based application prepares dental 3D scans for Instron machine 
+  retention testing by automating the workflow of aligning dental models 
+  with the Maryland Pull-Out Device template and performing Boolean operations 
+  to create print-ready STL files for orthodontic research.
+
+keywords:
+  - orthodontics
+  - dental retention
+  - 3D modeling
+  - Instron testing
+  - Boolean operations
+  - dental research
+  - STL processing

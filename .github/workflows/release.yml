@@ -1,0 +1,76 @@
+name: "Release"
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers on version tags like v1.1.0
+
+jobs:
+  publish:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos-latest
+            args: '--target universal-apple-darwin'
+          - platform: windows-latest
+            args: ''
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Build Tauri App
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # macOS signing (add these secrets to your repo)
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        with:
+          tagName: v__VERSION__
+          releaseName: "Maryland Pull-Out Device Model Prep v__VERSION__"
+          releaseBody: |
+            ## Downloads
+            
+            | Platform | File |
+            |----------|------|
+            | **Windows** | `.exe` installer (recommended) or `.msi` |
+            | **macOS** (Intel + Apple Silicon) | `.dmg` file |
+            | **Web Browser** | [Run in Browser](https://MaxeThis.github.io/Maryland-Pull-Out-Device-Model-Prep/) |
+            
+            ### Windows Installation
+            1. Download the `.exe` installer
+            2. Run the installer
+            3. If Windows SmartScreen appears, click "More info" → "Run anyway"
+            
+            ### macOS Installation
+            1. Download the `.dmg` file
+            2. Open it and drag the app to Applications
+            3. The app is signed and notarized - no security warnings!
+            
+            ### Web Version
+            No installation needed! Run directly in your browser at:
+            **https://MaxeThis.github.io/Maryland-Pull-Out-Device-Model-Prep/**
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maryland Pull-Out Device: Model Prep</title>
+        content="Prepare dental 3D scans for Instron machine testing with the Maryland Pull-Out Device">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="src/styles/main.css">
+    <link rel="icon" href="public/icons/Final_Maryland Retention Rig Logo - 1024.ico" />
+</head>
+
+<body>
+    <!-- Custom Title Bar -->
+    <div class="titlebar">
+        <div class="titlebar-icon" data-tauri-drag-region>
+            <img src="public/icons/Final_Maryland Retention Rig Logo - 1024.ico" alt="App Icon" />
+        </div>
+        <div class="titlebar-text" data-tauri-drag-region>Maryland Pull-Out Device</div>
+        <div class="titlebar-controls">
+            <button class="titlebar-button" id="titlebar-minimize">
+                <svg width="10" height="1" viewBox="0 0 10 1">
+                    <path d="M0 0h10v1H0z" fill="currentColor" />
+                </svg>
+            </button>
+            <button class="titlebar-button" id="titlebar-maximize">
+                <svg width="10" height="10" viewBox="0 0 10 10">
+                    <path d="M1 1h8v8H1z" fill="none" stroke="currentColor" stroke-width="1" />
+                </svg>
+            </button>
+            <button class="titlebar-button" id="titlebar-close">
+                <svg width="10" height="10" viewBox="0 0 10 10">
+                    <path d="M1 1l8 8m0-8l-8 8" fill="none" stroke="currentColor" stroke-width="1" />
+                </svg>
+            </button>
+        </div>
+    </div>
+    <!-- 3D Viewport -->
+    <div id="viewport">
+        <canvas id="canvas"></canvas>
+        <div id="loading-overlay">
+            <div class="loader">
+                <div class="loader-card">
+                    <div class="maryland-flag-spinner">
+                        <div class="spinner-pulse"></div>
+                    </div>
+                    <p>Loading Rig Template...</p>
+                </div>
+            </div>
+        </div>
+        <!-- Processing Overlay (Liquid Glass) -->
+        <div id="processing-overlay" class="hidden">
+            <div class="processing-content">
+                <div class="liquid-glass-spinner">
+                    <div class="spinner-ring ring-1"></div>
+                    <div class="spinner-ring ring-2"></div>
+                    <div class="spinner-ring ring-3"></div>
+                    <div class="spinner-core"></div>
+                </div>
+                <div class="processing-text">
+                    <h3>Processing Mesh</h3>
+                    <p id="processing-status">Running Boolean operations...</p>
+                </div>
+                <div class="processing-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 3D View Cube (Blender-style) -->
+        <div id="view-cube-container">
+            <canvas id="view-cube-canvas"></canvas>
+        </div>
+
+        <!-- Transform Mode Buttons -->
+        <div id="transform-controls" class="glass-panel">
+            <button id="mode-translate" class="mode-btn active" title="Move (G)">⬌ Move</button>
+            <button id="mode-rotate" class="mode-btn" title="Rotate (R)">↻ Rotate</button>
+            <button id="toggle-gizmo" class="mode-btn" title="Toggle Gizmo Visibility">👁 Hide</button>
+        </div>
+
+        <!-- Help Button -->
+        <div id="help-controls" class="glass-panel">
+            <button id="btn-help" class="mode-btn" title="Help (?)">? Help</button>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="help-modal" class="hidden">
+        <div class="help-overlay"></div>
+        <div class="help-content glass-panel">
+            <h2>Controls & Shortcuts</h2>
+
+            <div class="help-section">
+                <h3><span class="icon">🖱️</span> Mouse Controls</h3>
+                <ul>
+                    <li><strong>Left Click + Drag:</strong> Rotate View</li>
+                    <li><strong>Right Click + Drag:</strong> Pan View</li>
+                    <li><strong>Scroll:</strong> Zoom In/Out</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3><span class="icon">⌨️</span> Keyboard Shortcuts</h3>
+                <ul>
+                    <li><span class="key-badge">G</span> Move Mode</li>
+                    <li><span class="key-badge">R</span> Rotate Mode</li>
+                </ul>
+            </div>
+
+            <button id="btn-help-close" class="btn btn-primary">Okay</button>
+        </div>
+    </div>
+
+    <!-- Right Sidebar - Control Panel -->
+    <aside id="sidebar" class="glass-panel">
+        <header class="sidebar-header">
+            <h1>
+                <span class="title-main">Maryland Pull-Out Device</span>
+                <span class="title-sub">Model Prep</span>
+            </h1>
+            <span class="version">v1.0</span>
+        </header>
+
+        <!-- Step 1: Import -->
+        <section class="control-section" data-step="1">
+            <h2><span class="step-num">1</span> Import Scan</h2>
+            <div class="control-group">
+                <label for="stl-upload" class="upload-btn">
+                    <span class="icon">📂</span>
+                    Upload STL
+                    <input type="file" id="stl-upload" accept=".stl" hidden>
+                </label>
+                <p class="file-name" id="filename-display">No file selected</p>
+            </div>
+        </section>
+
+        <!-- Step 2: Alignment -->
+        <section class="control-section" data-step="2" disabled>
+            <h2><span class="step-num">2</span> Model Alignment</h2>
+            <div class="control-group">
+                <label>Position</label>
+                <div class="slider-row">
+                    <span class="axis x">X</span>
+                    <input type="range" id="model-pos-x" min="-50" max="50" value="0" step="0.1">
+                    <input type="number" id="model-pos-x-val" value="0" step="0.1">
+                </div>
+                <div class="slider-row">
+                    <span class="axis y">Y</span>
+                    <input type="range" id="model-pos-y" min="-50" max="50" value="0" step="0.1">
+                    <input type="number" id="model-pos-y-val" value="0" step="0.1">
+                </div>
+                <div class="slider-row">
+                    <span class="axis z">Z</span>
+                    <input type="range" id="model-pos-z" min="-50" max="50" value="0" step="0.1">
+                    <input type="number" id="model-pos-z-val" value="0" step="0.1">
+                </div>
+            </div>
+            <div class="control-group">
+                <label>Rotation (°)</label>
+                <div class="slider-row">
+                    <span class="axis x">X</span>
+                    <input type="range" id="model-rot-x" min="-180" max="180" value="0" step="1">
+                    <input type="number" id="model-rot-x-val" value="0" step="1">
+                </div>
+                <div class="slider-row">
+                    <span class="axis y">Y</span>
+                    <input type="range" id="model-rot-y" min="-180" max="180" value="0" step="1">
+                    <input type="number" id="model-rot-y-val" value="0" step="1">
+                </div>
+                <div class="slider-row">
+                    <span class="axis z">Z</span>
+                    <input type="range" id="model-rot-z" min="-180" max="180" value="0" step="1">
+                    <input type="number" id="model-rot-z-val" value="0" step="1">
+                </div>
+            </div>
+            <div class="control-group">
+                <button id="btn-continue-filler" class="btn btn-gold">
+                    Continue to Arch Filler →
+                </button>
+            </div>
+        </section>
+
+        <!-- Step 3: Filler -->
+        <section class="control-section" data-step="3" disabled>
+            <h2><span class="step-num">3</span> Arch Filler</h2>
+            <div class="control-group">
+                <label>Position</label>
+                <div class="slider-row">
+                    <span class="axis x">X</span>
+                    <input type="range" id="filler-pos-x" min="-30" max="30" value="0" step="0.1">
+                    <input type="number" id="filler-pos-x-val" value="0" step="0.1">
+                </div>
+                <div class="slider-row">
+                    <span class="axis z">Z</span>
+                    <input type="range" id="filler-pos-z" min="-30" max="30" value="0" step="0.1">
+                    <input type="number" id="filler-pos-z-val" value="0" step="0.1">
+                </div>
+            </div>
+            <div class="control-group">
+                <label>Scale</label>
+                <div class="slider-row">
+                    <span class="axis x">X</span>
+                    <input type="range" id="filler-scale-x" min="0.5" max="2" value="1" step="0.01">
+                    <input type="number" id="filler-scale-x-val" value="1" step="0.01">
+                </div>
+                <div class="slider-row">
+                    <span class="axis z">Z</span>
+                    <input type="range" id="filler-scale-z" min="0.5" max="2" value="1" step="0.01">
+                    <input type="number" id="filler-scale-z-val" value="1" step="0.01">
+                </div>
+            </div>
+            <div class="control-group">
+                <button id="btn-back-to-model" class="btn btn-secondary" style="margin-top: 10px; width: 100%;">
+                    ← Back to Model Alignment
+                </button>
+            </div>
+        </section>
+
+        <!-- Step 4: Process & Export -->
+        <section class="control-section" data-step="4" disabled>
+            <h2><span class="step-num">4</span> Finalize</h2>
+            <div class="control-group">
+                <button id="btn-process" class="btn btn-primary">
+                    <span class="icon">⚙️</span>
+                    Process & Merge
+                </button>
+                <button id="btn-export" class="btn btn-gold" disabled>
+                    <span class="icon">💾</span>
+                    Export STL
+                </button>
+            </div>
+        </section>
+    </aside>
+
+    <!-- Bottom Status Bar -->
+    <footer id="statusbar" class="glass-panel">
+        <div class="instruction" id="instruction-text">
+            Load the rig template to begin...
+        </div>
+        <div class="stats">
+            <span id="fps-counter">-- FPS</span>
+            <span id="processing-time"></span>
+        </div>
+    </footer>
+
+    <!-- ES Module Scripts -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://esm.sh/three@0.160.0",
+            "three/addons/": "https://esm.sh/three@0.160.0/examples/jsm/",
+            "three-bvh-csg": "https://esm.sh/three-bvh-csg@0.0.16?external=three"
+        }
+    }
+    </script>
+    <script type="module" src="src/main.js"></script>
+    <script type="module" src="src/window-controls.js"></script>
+</body>
+
+</html>

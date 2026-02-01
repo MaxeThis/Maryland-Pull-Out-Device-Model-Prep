@@ -1,0 +1,17 @@
+{
+  "name": "maryland-pull-out-device-model-prep",
+  "version": "1.0.0",
+  "description": "Prepare dental 3D scans for Instron machine testing with the Maryland Pull-Out Device",
+  "main": "index.html",
+  "author": "Maxwell Mendelson <maxwell.mendelson@umaryland.edu>",
+  "scripts": {
+    "dev": "static-server dist -p 8000",
+    "tauri": "tauri",
+    "build": "tauri build"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.5.0",
+    "static-server": "^3.0.0"
+  }
+}
