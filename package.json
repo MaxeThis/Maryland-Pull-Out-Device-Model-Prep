@@ -5,7 +5,7 @@
   "main": "index.html",
   "author": "Maxwell Mendelson <maxwell.mendelson@umaryland.edu>",
   "scripts": {
-    "dev": "static-server dist -p 8000",
+    "dev": "static-server . -p 8000",
     "tauri": "tauri",
     "build": "tauri build"
   },

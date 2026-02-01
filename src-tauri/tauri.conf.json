@@ -1,9 +1,9 @@
 {
     "build": {
         "beforeDevCommand": "",
-        "beforeBuildCommand": "",
-        "devPath": "../dist",
-        "distDir": "../dist",
+        "beforeBuildCommand": "node ../build-context.js",
+        "devPath": "../",
+        "distDir": "../dist_build",
         "withGlobalTauri": true
     },
     "package": {
@@ -46,7 +46,7 @@
                 "icons/icon.ico"
             ],
             "resources": [
-                "../dist/public/**/*"
+                "../public/**/*"
             ],
             "externalBin": [],
             "copyright": "",
